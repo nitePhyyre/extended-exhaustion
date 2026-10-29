@@ -9,7 +9,6 @@ import { registerSheetIntegration } from "./sheet.mjs";
 import { registerTokenHUD } from "./token-hud.mjs";
 import { registerSpendCleanup } from "./spend-effects.mjs";
 import ExhaustionTracker from "./apps/tracker.mjs";
-import SpendDialog from "./apps/spend-dialog.mjs";
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -33,7 +32,6 @@ Hooks.once("init", () => {
 
   foundry.applications.handlebars.loadTemplates([
     `modules/${MODULE_ID}/templates/tracker.hbs`,
-    `modules/${MODULE_ID}/templates/spend.hbs`,
     `modules/${MODULE_ID}/templates/place.hbs`,
     `modules/${MODULE_ID}/templates/chat/change.hbs`,
     `modules/${MODULE_ID}/templates/chat/recovery.hbs`,
@@ -46,7 +44,6 @@ Hooks.once("init", () => {
     SPEND_OPTIONS,
     TRACKS,
     ExhaustionTracker,
-    SpendDialog,
     ...exhaustion,
     ...spending,
     recoverOnLongRest,
@@ -61,13 +58,16 @@ Hooks.once("init", () => {
       return actor ? ExhaustionTracker.open(actor) : null;
     },
     /**
-     * Open the spending dialog for an actor or token.
+     * Open the exhaustion tracker on its spending tab.
      * @param {Actor|Token|TokenDocument} [target]
-     * @returns {SpendDialog|null}
+     * @returns {ExhaustionTracker|null}
      */
     spendDialog(target) {
       const actor = resolveActor(target);
-      return actor ? SpendDialog.open(actor) : null;
+      if ( !actor ) return null;
+      const app = ExhaustionTracker.open(actor);
+      app.changeTab("spend", "primary");
+      return app;
     }
   };
 

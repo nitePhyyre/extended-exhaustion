@@ -321,30 +321,37 @@ button.ee-step.small {
 /*  Spending dialog                            */
 /* ------------------------------------------- */
 
-/* Fills the window content and is allowed to shrink, so the option list below can scroll rather
-   than growing past the window and being clipped. A flex child defaults to min-height:auto, which
-   would pin it to its content height. */
-.ee-spend .ee-body {
-  display: flex;
+/* Each tab pane fills the body and is allowed to shrink, so its list scrolls rather than growing
+   past the window. A flex child defaults to min-height:auto, which would pin it to its content. */
+.ee-tracker .tab {
+  display: none;
   flex-direction: column;
   gap: 0.75rem;
-  padding: 0.75rem;
   flex: 1 1 auto;
   min-height: 0;
-  height: 100%;
 }
 
-.ee-spend .ee-spend-header,
-.ee-spend .ee-body > .ee-note,
-.ee-spend .ee-body > .ee-footer {
-  flex: 0 0 auto;
-}
-
-.ee-spend-header {
+.ee-tracker .tab.active {
   display: flex;
-  gap: 1rem;
-  align-items: center;
-  justify-content: space-between;
+}
+
+.ee-tracker .tabs {
+  display: flex;
+  gap: 0.25rem;
+  flex: 0 0 auto;
+  border-bottom: 1px solid var(--ee-rule);
+}
+
+.ee-tracker .tabs .item {
+  padding: 0.3rem 0.7rem;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ee-tracker .tabs .item.active {
+  border-bottom-color: var(--ee-accent);
+  font-weight: bold;
 }
 
 .ee-spend-intro {

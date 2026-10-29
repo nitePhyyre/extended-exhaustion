@@ -5,7 +5,7 @@ import {
 } from "../exhaustion.mjs";
 import { recoverOnLongRest } from "../recovery.mjs";
 import { setting } from "../settings.mjs";
-import SpendDialog from "./spend-dialog.mjs";
+import { isUnconscious, prepareOptions, spend } from "../spending.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -35,13 +35,29 @@ export default class ExhaustionTracker extends HandlebarsApplicationMixin(Applic
       adjustTrack: ExhaustionTracker.#onAdjustTrack,
       clear: ExhaustionTracker.#onClear,
       longRest: ExhaustionTracker.#onLongRest,
-      spend: ExhaustionTracker.#onSpend
+      spend: ExhaustionTracker.#onSpend,
+      toggleAll: ExhaustionTracker.#onToggleAll
     }
   };
 
   /** @override */
   static PARTS = {
-    body: { template: `modules/${MODULE_ID}/templates/tracker.hbs`, scrollable: [".ee-tracks"] }
+    body: {
+      template: `modules/${MODULE_ID}/templates/tracker.hbs`,
+      scrollable: [".ee-tracks", ".ee-options"]
+    }
+  };
+
+  /** @override */
+  static TABS = {
+    primary: {
+      tabs: [
+        { id: "table", icon: "fa-solid fa-table-list" },
+        { id: "spend", icon: "fa-solid fa-fire-flame-curved" }
+      ],
+      initial: "table",
+      labelPrefix: "EXTENDED_EXHAUSTION.Tracker.Tab"
+    }
   };
 
   /* -------------------------------------------- */
@@ -61,6 +77,9 @@ export default class ExhaustionTracker extends HandlebarsApplicationMixin(Applic
 
   /** Level at the start of the current burst of edits, for the summary card. @type {number|null} */
   #burstFrom = null;
+
+  /** Whether spend options irrelevant to this actor's class are shown. @type {boolean} */
+  #showAll = false;
 
   /* -------------------------------------------- */
 
@@ -115,6 +134,9 @@ export default class ExhaustionTracker extends HandlebarsApplicationMixin(Applic
         ? "EXTENDED_EXHAUSTION.Settings.Method.Choice"
         : "EXTENDED_EXHAUSTION.Settings.Method.Sequential"),
       recoveryDC: level > 0 ? setting("recoveryBaseDC") - Math.max(0, level - 1) : null,
+      unconscious: isUnconscious(actor),
+      showAll: this.#showAll,
+      ...spendContext(actor, this.#showAll, setting("enableSpending") && actor.isOwner),
       tracks: TRACKS.map(track => ({
         id: track.id,
         icon: track.icon,
@@ -195,11 +217,35 @@ export default class ExhaustionTracker extends HandlebarsApplicationMixin(Applic
   /* -------------------------------------------- */
 
   /**
-   * Open the spending dialog.
+   * Spend exhaustion on one of the options, in place.
+   * @this {ExhaustionTracker}
+   * @param {PointerEvent} event
+   * @param {HTMLElement} target
+   */
+  static async #onSpend(event, target) {
+    const row = target.closest("[data-option]");
+    const optionId = row?.dataset.option;
+    if ( !optionId ) return;
+    const spellLevel = Number(row.querySelector('[name="spellLevel"]')?.value) || 1;
+    const beyondMax = row.querySelector('[name="beyondMax"]')?.checked ?? false;
+    const kaioken = row.querySelector('[name="kaioken"]')?.checked ?? false;
+    target.disabled = true;
+    try {
+      await spend(this.#actor, optionId, { spellLevel, beyondMax, kaioken });
+    } finally {
+      this.render();
+    }
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Show or hide options that are not relevant to this actor.
    * @this {ExhaustionTracker}
    */
-  static #onSpend() {
-    new SpendDialog({ actor: this.#actor }).render({ force: true });
+  static #onToggleAll() {
+    this.#showAll = !this.#showAll;
+    this.render();
   }
 
   /* -------------------------------------------- */
@@ -215,7 +261,12 @@ export default class ExhaustionTracker extends HandlebarsApplicationMixin(Applic
   static async #onSubmitForm(event, form, formData) {
     const submitted = foundry.utils.expandObject(formData.object ?? {})?.marks;
     if ( !submitted ) return;
-    this.#commit(() => clampMarks(submitted));
+    // The spend pane's own fields share this form, so ignore submissions that leave the table
+    // untouched rather than writing the same distribution back.
+    const next = clampMarks(submitted);
+    const current = this.#pending ?? getMarks(this.#actor);
+    if ( TRACK_IDS.every(id => next[id] === current[id]) ) return;
+    this.#commit(() => next);
   }
 
   /* -------------------------------------------- */
@@ -318,4 +369,23 @@ export default class ExhaustionTracker extends HandlebarsApplicationMixin(Applic
     app.render({ force: true });
     return app;
   }
+}
+
+/* -------------------------------------------- */
+
+/**
+ * Context for the spend pane.
+ * @param {Actor} actor
+ * @param {boolean} showAll   Whether options irrelevant to this actor are shown.
+ * @param {boolean} enabled   Whether spending is available at all.
+ * @returns {object}
+ */
+function spendContext(actor, showAll, enabled) {
+  if ( !enabled ) return { spending: false, options: [], hidden: 0 };
+  const all = prepareOptions(actor);
+  return {
+    spending: true,
+    hidden: all.filter(o => !o.relevant).length,
+    options: showAll ? all : all.filter(o => o.relevant)
+  };
 }
