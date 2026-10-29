@@ -1,0 +1,24 @@
+<div class="extended-exhaustion ee-card spend">
+    <header class="ee-card-header">
+        <i class="fa-solid fa-fire-flame-curved" inert></i>
+        <div>
+            <h4>{{ name }}</h4>
+            <p class="ee-card-reason">
+                {{ localize "EXTENDED_EXHAUSTION.Card.Spent" }} {{ cost }}{{#if reaction}} &middot;
+                {{ localize "EXTENDED_EXHAUSTION.Spend.Reaction" }}{{/if}}
+            </p>
+        </div>
+    </header>
+
+    {{#if detail}}<p class="ee-card-detail">{{ detail }}</p>{{/if}}
+    {{#if applied}}<p class="ee-note success">{{ applied }}</p>{{/if}}
+    {{#if effect}}
+    <p class="ee-note {{#if effectFailed}}dead{{else}}success{{/if}}">{{ effect }}</p>
+    {{/if}}
+
+    <p class="ee-option-text">{{ text }}</p>
+
+    <p class="ee-card-level">
+        {{ localize "EXTENDED_EXHAUSTION.Spend.Current" }} <strong>{{ level }}</strong>
+    </p>
+</div>

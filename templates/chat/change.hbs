@@ -1,0 +1,35 @@
+<div class="extended-exhaustion ee-card {{#if gained}}gained{{else}}recovered{{/if}}">
+    <header class="ee-card-header">
+        <i class="fa-solid {{#if gained}}fa-bed{{else}}fa-heart-pulse{{/if}}" inert></i>
+        <div>
+            <h4>{{#if gained}}
+                {{ localize "EXTENDED_EXHAUSTION.Card.Gained" }}
+            {{else}}
+                {{ localize "EXTENDED_EXHAUSTION.Card.Recovered" }}
+            {{/if}}</h4>
+            {{#if reason}}<p class="ee-card-reason">{{ reason }}</p>{{/if}}
+        </div>
+    </header>
+
+    <p class="ee-card-level">
+        {{ from }} <i class="fa-solid fa-arrow-right" inert></i> <strong>{{ to }}</strong>
+    </p>
+
+    {{#if dead}}
+    <p class="ee-note dead">{{ localize "EXTENDED_EXHAUSTION.Card.Dead" }}</p>
+    {{/if}}
+
+    {{#if tracks.length}}
+    <table class="ee-card-table">
+        <tbody>
+        {{#each tracks}}
+        <tr>
+            <td><i class="{{ icon }}" inert></i> {{ localize label }}</td>
+            <td class="ee-card-marks">{{ marks }}</td>
+            <td class="ee-card-penalty">{{ display }}</td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    {{/if}}
+</div>

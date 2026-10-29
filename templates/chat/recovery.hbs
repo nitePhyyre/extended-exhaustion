@@ -1,0 +1,44 @@
+<div class="extended-exhaustion ee-card recovery">
+    <header class="ee-card-header">
+        <i class="fa-solid fa-bed" inert></i>
+        <div>
+            <h4>{{ localize "EXTENDED_EXHAUSTION.Recovery.Title" }}</h4>
+            <p class="ee-card-reason">{{ localize "EXTENDED_EXHAUSTION.Recovery.Subtitle" }}</p>
+        </div>
+    </header>
+
+    <p class="ee-card-level">
+        {{ start }} <i class="fa-solid fa-arrow-right" inert></i> <strong>{{ end }}</strong>
+    </p>
+
+    {{#if deprived}}
+    <p class="ee-note dead">{{ localize "EXTENDED_EXHAUSTION.Recovery.Deprived" }}</p>
+    {{/if}}
+
+    <ol class="ee-steps">
+        {{#each steps}}
+        <li class="ee-step-row {{#if success}}success{{/if}}{{#if automatic}}automatic{{/if}}">
+            {{#if automatic}}
+            <p class="ee-step-label">{{ localize "EXTENDED_EXHAUSTION.Recovery.Automatic" }}</p>
+            {{else}}
+            <p class="ee-step-label">
+                {{ localize "EXTENDED_EXHAUSTION.Recovery.Save" }}
+                <span class="ee-step-dc">{{ localize "EXTENDED_EXHAUSTION.Recovery.DC" }} {{ dc }}</span>
+                <span class="ee-step-outcome">
+                    {{#if success}}
+                    {{ localize "EXTENDED_EXHAUSTION.Recovery.Success" }}
+                    {{else}}
+                    {{ localize "EXTENDED_EXHAUSTION.Recovery.Failure" }}
+                    {{/if}}
+                </span>
+            </p>
+            {{{ html }}}
+            {{/if}}
+        </li>
+        {{/each}}
+    </ol>
+
+    {{#if cleared}}
+    <p class="ee-note success">{{ localize "EXTENDED_EXHAUSTION.Recovery.Cleared" }}</p>
+    {{/if}}
+</div>

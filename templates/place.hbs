@@ -1,0 +1,37 @@
+<div class="ee-place-body">
+    {{#if reason}}<p class="ee-place-reason">{{ reason }}</p>{{/if}}
+
+    <p class="ee-place-prompt">
+        {{#if multiple}}
+        {{ localize "EXTENDED_EXHAUSTION.Place.PromptMany" remaining=remaining count=count }}
+        {{else}}
+        {{ localize "EXTENDED_EXHAUSTION.Place.Prompt" }}
+        {{/if}}
+    </p>
+
+    <ol class="ee-place-options">
+        {{#each tracks}}
+        <li>
+            <button type="button" class="ee-place-option {{#if full}}full{{/if}}" data-action="place"
+                    data-track="{{ id }}" {{#if full}}disabled{{/if}} data-tooltip="{{ hint }}">
+                <i class="{{ icon }}" inert></i>
+                <span class="ee-place-name">{{ label }}</span>
+                {{#if assigned}}<span class="ee-place-assigned">+{{ assigned }}</span>{{/if}}
+                <span class="ee-place-count">{{ marks }}/{{ @root.rows }}</span>
+                <span class="ee-place-penalty">{{ penalty }}</span>
+            </button>
+        </li>
+        {{/each}}
+    </ol>
+
+    <p class="ee-hint">
+        {{ localize "EXTENDED_EXHAUSTION.Tracker.Scale" rows=rows speed=speedStep zeroAt=zeroAt }}
+    </p>
+
+    <footer class="ee-footer">
+        <button type="button" data-action="auto">
+            <i class="fa-solid fa-wand-magic-sparkles" inert></i>
+            {{ localize "EXTENDED_EXHAUSTION.Place.Auto" }}
+        </button>
+    </footer>
+</div>
