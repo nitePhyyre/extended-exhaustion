@@ -9,6 +9,9 @@ import { isUnconscious, prepareOptions, spend } from "../spending.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
+/** How many rows of spending options are shown before the list scrolls. */
+const ROWS_SHOWN = 2;
+
 /**
  * The Extended Exhaustion table for a single actor: its current level, how that level is
  * distributed across the six penalty tracks, and what each track is costing it.
@@ -324,10 +327,38 @@ export default class ExhaustionTracker extends HandlebarsApplicationMixin(Applic
   /** @inheritDoc */
   async _onRender(context, options) {
     await super._onRender(context, options);
+    this.#capOptionRows();
     this.#hookId ??= Hooks.on("updateActor", actor => {
       if ( (actor !== this.#actor) || this.#pending ) return;
       this.render();
     });
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Show two rows of spending options and scroll the rest.
+   *
+   * Card heights vary with the length of their rules text, so the cut-off is measured from where
+   * the third row actually starts rather than assumed from a fixed row height, which would either
+   * clip the longer descriptions or leave gaps under the shorter ones.
+   */
+  #capOptionRows() {
+    const list = this.element?.querySelector(".ee-options");
+    if ( !list ) return;
+    list.style.maxHeight = "";
+
+    const cards = [...list.querySelectorAll(".ee-option")];
+    if ( cards.length < 2 ) return;
+
+    // Group the cards by the row they landed on, in document order.
+    const origin = list.getBoundingClientRect().top - list.scrollTop;
+    const rowTops = [...new Set(cards.map(c => Math.round(c.getBoundingClientRect().top - origin)))]
+      .sort((a, b) => a - b);
+    if ( rowTops.length <= ROWS_SHOWN ) return;
+
+    const gap = parseFloat(getComputedStyle(list).rowGap) || 0;
+    list.style.maxHeight = `${rowTops[ROWS_SHOWN] - gap}px`;
   }
 
   /* -------------------------------------------- */
