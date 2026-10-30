@@ -58,16 +58,13 @@ Hooks.once("init", () => {
       return actor ? ExhaustionTracker.open(actor) : null;
     },
     /**
-     * Open the exhaustion tracker on its spending tab.
+     * Open the exhaustion tracker, which carries the spending options alongside the table.
      * @param {Actor|Token|TokenDocument} [target]
      * @returns {ExhaustionTracker|null}
      */
     spendDialog(target) {
       const actor = resolveActor(target);
-      if ( !actor ) return null;
-      const app = ExhaustionTracker.open(actor);
-      app.changeTab("spend", "primary");
-      return app;
+      return actor ? ExhaustionTracker.open(actor) : null;
     }
   };
 

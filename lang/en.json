@@ -66,8 +66,6 @@
   "EXTENDED_EXHAUSTION.Notification.Unconscious": "An unconscious creature cannot voluntarily spend exhaustion, except to reroll a death saving throw.",
   "EXTENDED_EXHAUSTION.Notification.Lethal": "Spending {cost} would push exhaustion past {max} from its current level of {level}, which would be fatal.",
   "EXTENDED_EXHAUSTION.Tracker.Title": "Extended Exhaustion",
-  "EXTENDED_EXHAUSTION.Tracker.Tab.table": "Exhaustion",
-  "EXTENDED_EXHAUSTION.Tracker.Tab.spend": "Spend",
   "EXTENDED_EXHAUSTION.Tracker.TitleFor": "Extended Exhaustion: {name}",
   "EXTENDED_EXHAUSTION.Tracker.Increase": "Gain a level of exhaustion",
   "EXTENDED_EXHAUSTION.Tracker.Decrease": "Remove a level of exhaustion",

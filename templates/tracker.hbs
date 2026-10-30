@@ -1,164 +1,158 @@
 <div class="ee-body">
-    <nav class="tabs" data-group="primary">
-        {{#each tabs}}
-        <a class="item {{ cssClass }}" data-action="tab" data-group="{{ group }}" data-tab="{{ id }}">
-            <i class="{{ icon }}" inert></i> {{ localize label }}
-        </a>
-        {{/each}}
-    </nav>
-
-    <section class="tab {{ tabs.table.cssClass }}" data-group="primary" data-tab="table">
-    <div class="ee-summary {{#if dead}}dead{{/if}}">
-            <div class="ee-level">
-                {{#if editable}}
-                <button type="button" class="ee-step" data-action="adjustLevel" data-delta="-1"
-                        data-tooltip="EXTENDED_EXHAUSTION.Tracker.Decrease"
-                        aria-label="{{ localize 'EXTENDED_EXHAUSTION.Tracker.Decrease' }}">
-                    <i class="fa-solid fa-minus" inert></i>
-                </button>
-                {{/if}}
-                <div class="ee-level-value">
-                    <span class="ee-level-current">{{#if immune}}&mdash;{{else}}{{ level }}{{/if}}</span>
-                    <span class="ee-level-max">/ {{ max }}</span>
-                </div>
-                {{#if editable}}
-                <button type="button" class="ee-step" data-action="adjustLevel" data-delta="1"
-                        {{#if atMax}}disabled{{/if}}
-                        data-tooltip="EXTENDED_EXHAUSTION.Tracker.Increase"
-                        aria-label="{{ localize 'EXTENDED_EXHAUSTION.Tracker.Increase' }}">
-                    <i class="fa-solid fa-plus" inert></i>
-                </button>
-                {{/if}}
-            </div>
-
-            <div class="ee-summary-meta">
-                <p class="ee-method">{{ methodLabel }}</p>
-                {{#if immune}}
-                <p class="ee-note immune">{{ localize "EXTENDED_EXHAUSTION.Tooltip.Immune" }}</p>
-                {{else if dead}}
-                <p class="ee-note dead">{{ localize "EXTENDED_EXHAUSTION.Tracker.Dead" }}</p>
-                {{else if recoveryDC}}
-                <p class="ee-note">{{ localize "EXTENDED_EXHAUSTION.Tracker.NextRecoveryDC" }} <strong>{{ recoveryDC }}</strong></p>
-                {{/if}}
-            </div>
-        </div>
-
-        <ol class="ee-tracks">
-            {{#each tracks}}
-            <li class="ee-track {{#if marks}}marked{{/if}}" data-track="{{ id }}">
-                <i class="ee-track-icon {{ icon }}" inert></i>
-                <div class="ee-track-name">
-                    <span class="ee-track-label">{{ label }}</span>
-                    <span class="ee-track-hint">{{ hint }}</span>
-                </div>
-                <div class="ee-track-marks">
-                    {{#if @root.choice}}
-                    {{#if @root.editable}}
-                    <button type="button" class="ee-step small" data-action="adjustTrack" data-track="{{ id }}" data-delta="-1"
+    <div class="ee-columns">
+        <div class="ee-col ee-col-table">
+        <div class="ee-summary {{#if dead}}dead{{/if}}">
+                <div class="ee-level">
+                    {{#if editable}}
+                    <button type="button" class="ee-step" data-action="adjustLevel" data-delta="-1"
+                            data-tooltip="EXTENDED_EXHAUSTION.Tracker.Decrease"
                             aria-label="{{ localize 'EXTENDED_EXHAUSTION.Tracker.Decrease' }}">
                         <i class="fa-solid fa-minus" inert></i>
                     </button>
                     {{/if}}
-                    <input type="number" name="marks.{{ id }}" value="{{ marks }}" min="0" step="1"
-                           max="{{ @root.rows }}"
-                           {{#unless @root.editable}}readonly{{/unless}}>
-                    {{#if @root.editable}}
-                    <button type="button" class="ee-step small" data-action="adjustTrack" data-track="{{ id }}" data-delta="1"
-                            {{#if full}}disabled{{/if}}{{#if @root.atMax}} disabled{{/if}}
+                    <div class="ee-level-value">
+                        <span class="ee-level-current">{{#if immune}}&mdash;{{else}}{{ level }}{{/if}}</span>
+                        <span class="ee-level-max">/ {{ max }}</span>
+                    </div>
+                    {{#if editable}}
+                    <button type="button" class="ee-step" data-action="adjustLevel" data-delta="1"
+                            {{#if atMax}}disabled{{/if}}
+                            data-tooltip="EXTENDED_EXHAUSTION.Tracker.Increase"
                             aria-label="{{ localize 'EXTENDED_EXHAUSTION.Tracker.Increase' }}">
                         <i class="fa-solid fa-plus" inert></i>
                     </button>
                     {{/if}}
-                    {{else}}
-                    <span class="ee-track-count">{{ marks }}</span>
+                </div>
+
+                <div class="ee-summary-meta">
+                    <p class="ee-method">{{ methodLabel }}</p>
+                    {{#if immune}}
+                    <p class="ee-note immune">{{ localize "EXTENDED_EXHAUSTION.Tooltip.Immune" }}</p>
+                    {{else if dead}}
+                    <p class="ee-note dead">{{ localize "EXTENDED_EXHAUSTION.Tracker.Dead" }}</p>
+                    {{else if recoveryDC}}
+                    <p class="ee-note">{{ localize "EXTENDED_EXHAUSTION.Tracker.NextRecoveryDC" }} <strong>{{ recoveryDC }}</strong></p>
                     {{/if}}
                 </div>
-                <div class="ee-track-penalty">{{ penalty }}</div>
-            </li>
-            {{/each}}
-        </ol>
+            </div>
 
-        {{#if choice}}
-        <p class="ee-hint">{{ localize "EXTENDED_EXHAUSTION.Tracker.ChoiceHint" }}</p>
-        {{else}}
-        <p class="ee-hint">{{ localize "EXTENDED_EXHAUSTION.Tracker.SequentialHint" }}</p>
-        {{/if}}
-        <p class="ee-hint">{{ localize "EXTENDED_EXHAUSTION.Tracker.Scale" rows=rows speed=speedStep zeroAt=zeroAt }}</p>
-    </section>
-
-    <section class="tab {{ tabs.spend.cssClass }}" data-group="primary" data-tab="spend">
-        {{#if spending}}
-        <p class="ee-spend-intro">{{ localize "EXTENDED_EXHAUSTION.Spend.Intro" }}</p>
-        {{#if unconscious}}
-        <p class="ee-note dead">{{ localize "EXTENDED_EXHAUSTION.Spend.UnconsciousNote" }}</p>
-        {{/if}}
-    <ol class="ee-options">
-            {{#each options}}
-            <li class="ee-option {{#if disabled}}disabled{{/if}} {{#unless relevant}}irrelevant{{/unless}}"
-                data-option="{{ id }}">
-                <div class="ee-option-head">
-                    <span class="ee-option-name">{{ name }}</span>
-                    <span class="ee-option-cost">{{ costLabel }}{{#if reaction}} &middot;
-                        {{ localize "EXTENDED_EXHAUSTION.Spend.Reaction" }}{{/if}}</span>
-                </div>
-                <p class="ee-option-text">{{ text }}</p>
-
-                {{#if kaioken}}
-                <div class="ee-option-fields">
-                    <label class="checkbox">
-                        <input type="checkbox" name="kaioken">
-                        {{ localize "EXTENDED_EXHAUSTION.Spend.Kaioken" }}
-                    </label>
-                </div>
-                {{/if}}
-
-                {{#if variable}}
-                <div class="ee-option-fields">
-                    <label>
-                        {{ localize "EXTENDED_EXHAUSTION.Spend.SpellLevel" }}
-                        <input type="number" name="spellLevel" value="1" min="1" max="9" step="1">
-                    </label>
-                    <label class="checkbox">
-                        <input type="checkbox" name="beyondMax">
-                        {{ localize "EXTENDED_EXHAUSTION.Spend.BeyondMax" }}
-                    </label>
-                </div>
-                {{/if}}
-
-                {{#each blocked}}
-                <p class="ee-option-blocked"><i class="fa-solid fa-ban" inert></i> {{ this }}</p>
+            <ol class="ee-tracks">
+                {{#each tracks}}
+                <li class="ee-track {{#if marks}}marked{{/if}}" data-track="{{ id }}">
+                    <i class="ee-track-icon {{ icon }}" inert></i>
+                    <div class="ee-track-name">
+                        <span class="ee-track-label">{{ label }}</span>
+                        <span class="ee-track-hint">{{ hint }}</span>
+                    </div>
+                    <div class="ee-track-marks">
+                        {{#if @root.choice}}
+                        {{#if @root.editable}}
+                        <button type="button" class="ee-step small" data-action="adjustTrack" data-track="{{ id }}" data-delta="-1"
+                                aria-label="{{ localize 'EXTENDED_EXHAUSTION.Tracker.Decrease' }}">
+                            <i class="fa-solid fa-minus" inert></i>
+                        </button>
+                        {{/if}}
+                        <input type="number" name="marks.{{ id }}" value="{{ marks }}" min="0" step="1"
+                               max="{{ @root.rows }}"
+                               {{#unless @root.editable}}readonly{{/unless}}>
+                        {{#if @root.editable}}
+                        <button type="button" class="ee-step small" data-action="adjustTrack" data-track="{{ id }}" data-delta="1"
+                                {{#if full}}disabled{{/if}}{{#if @root.atMax}} disabled{{/if}}
+                                aria-label="{{ localize 'EXTENDED_EXHAUSTION.Tracker.Increase' }}">
+                            <i class="fa-solid fa-plus" inert></i>
+                        </button>
+                        {{/if}}
+                        {{else}}
+                        <span class="ee-track-count">{{ marks }}</span>
+                        {{/if}}
+                    </div>
+                    <div class="ee-track-penalty">{{ penalty }}</div>
+                </li>
                 {{/each}}
+            </ol>
 
-                <button type="button" class="ee-option-button" data-action="spend" {{#if disabled}}disabled{{/if}}>
-                    <i class="fa-solid fa-fire-flame-curved" inert></i>
-                    {{ localize "EXTENDED_EXHAUSTION.Spend.Confirm" }}
+            {{#if choice}}
+            <p class="ee-hint">{{ localize "EXTENDED_EXHAUSTION.Tracker.ChoiceHint" }}</p>
+            {{else}}
+            <p class="ee-hint">{{ localize "EXTENDED_EXHAUSTION.Tracker.SequentialHint" }}</p>
+            {{/if}}
+            <p class="ee-hint">{{ localize "EXTENDED_EXHAUSTION.Tracker.Scale" rows=rows speed=speedStep zeroAt=zeroAt }}</p>
+        </div>
+
+        <div class="ee-col ee-col-spend">
+    {{#if spending}}
+            <p class="ee-spend-intro">{{ localize "EXTENDED_EXHAUSTION.Spend.Intro" }}</p>
+            {{#if unconscious}}
+            <p class="ee-note dead">{{ localize "EXTENDED_EXHAUSTION.Spend.UnconsciousNote" }}</p>
+            {{/if}}
+        <ol class="ee-options">
+                {{#each options}}
+                <li class="ee-option {{#if disabled}}disabled{{/if}} {{#unless relevant}}irrelevant{{/unless}}"
+                    data-option="{{ id }}">
+                    <div class="ee-option-head">
+                        <span class="ee-option-name">{{ name }}</span>
+                        <span class="ee-option-cost">{{ costLabel }}{{#if reaction}} &middot;
+                            {{ localize "EXTENDED_EXHAUSTION.Spend.Reaction" }}{{/if}}</span>
+                    </div>
+                    <p class="ee-option-text">{{ text }}</p>
+
+                    {{#if kaioken}}
+                    <div class="ee-option-fields">
+                        <label class="checkbox">
+                            <input type="checkbox" name="kaioken">
+                            {{ localize "EXTENDED_EXHAUSTION.Spend.Kaioken" }}
+                        </label>
+                    </div>
+                    {{/if}}
+
+                    {{#if variable}}
+                    <div class="ee-option-fields">
+                        <label>
+                            {{ localize "EXTENDED_EXHAUSTION.Spend.SpellLevel" }}
+                            <input type="number" name="spellLevel" value="1" min="1" max="9" step="1">
+                        </label>
+                        <label class="checkbox">
+                            <input type="checkbox" name="beyondMax">
+                            {{ localize "EXTENDED_EXHAUSTION.Spend.BeyondMax" }}
+                        </label>
+                    </div>
+                    {{/if}}
+
+                    {{#each blocked}}
+                    <p class="ee-option-blocked"><i class="fa-solid fa-ban" inert></i> {{ this }}</p>
+                    {{/each}}
+
+                    <button type="button" class="ee-option-button" data-action="spend" {{#if disabled}}disabled{{/if}}>
+                        <i class="fa-solid fa-fire-flame-curved" inert></i>
+                        {{ localize "EXTENDED_EXHAUSTION.Spend.Confirm" }}
+                    </button>
+                </li>
+                {{/each}}
+            </ol>
+        {{#if hidden}}
+            <footer class="ee-footer">
+                <button type="button" data-action="toggleAll">
+                    <i class="fa-solid {{#if showAll}}fa-eye-slash{{else}}fa-eye{{/if}}" inert></i>
+                    {{#if showAll}}
+                    {{ localize "EXTENDED_EXHAUSTION.Spend.ShowRelevant" }}
+                    {{else}}
+                    {{ localize "EXTENDED_EXHAUSTION.Spend.ShowAll" }} ({{ hidden }})
+                    {{/if}}
                 </button>
-            </li>
-            {{/each}}
-        </ol>
-    {{#if hidden}}
-        <footer class="ee-footer">
-            <button type="button" data-action="toggleAll">
-                <i class="fa-solid {{#if showAll}}fa-eye-slash{{else}}fa-eye{{/if}}" inert></i>
-                {{#if showAll}}
-                {{ localize "EXTENDED_EXHAUSTION.Spend.ShowRelevant" }}
-                {{else}}
-                {{ localize "EXTENDED_EXHAUSTION.Spend.ShowAll" }} ({{ hidden }})
-                {{/if}}
-            </button>
-        </footer>
-        {{else if showAll}}
-        <footer class="ee-footer">
-            <button type="button" data-action="toggleAll">
-                <i class="fa-solid fa-eye-slash" inert></i>
-                {{ localize "EXTENDED_EXHAUSTION.Spend.ShowRelevant" }}
-            </button>
-        </footer>
-        {{/if}}
-        {{else}}
-        <p class="ee-hint">{{ localize "EXTENDED_EXHAUSTION.Spend.Disabled" }}</p>
-        {{/if}}
-    </section>
+            </footer>
+            {{else if showAll}}
+            <footer class="ee-footer">
+                <button type="button" data-action="toggleAll">
+                    <i class="fa-solid fa-eye-slash" inert></i>
+                    {{ localize "EXTENDED_EXHAUSTION.Spend.ShowRelevant" }}
+                </button>
+            </footer>
+            {{/if}}
+            {{else}}
+            <p class="ee-hint">{{ localize "EXTENDED_EXHAUSTION.Spend.Disabled" }}</p>
+            {{/if}}
+        </div>
+    </div>
 
     <footer class="ee-footer">
         {{#if editable}}

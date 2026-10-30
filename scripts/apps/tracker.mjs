@@ -24,7 +24,7 @@ export default class ExhaustionTracker extends HandlebarsApplicationMixin(Applic
       title: "EXTENDED_EXHAUSTION.Tracker.Title",
       icon: "fa-solid fa-bed"
     },
-    position: { width: 580, height: "auto" },
+    position: { width: 880, height: "auto" },
     form: {
       handler: ExhaustionTracker.#onSubmitForm,
       submitOnChange: true,
@@ -45,18 +45,6 @@ export default class ExhaustionTracker extends HandlebarsApplicationMixin(Applic
     body: {
       template: `modules/${MODULE_ID}/templates/tracker.hbs`,
       scrollable: [".ee-tracks", ".ee-options"]
-    }
-  };
-
-  /** @override */
-  static TABS = {
-    primary: {
-      tabs: [
-        { id: "table", icon: "fa-solid fa-table-list" },
-        { id: "spend", icon: "fa-solid fa-fire-flame-curved" }
-      ],
-      initial: "table",
-      labelPrefix: "EXTENDED_EXHAUSTION.Tracker.Tab"
     }
   };
 

@@ -100,7 +100,7 @@ still-exhausted maximum.
 
 ## Spending exhaustion
 
-All twelve options from the document live on the tracker's **Spend** tab:
+All twelve options from the document sit alongside the table in the tracker:
 1st-Level Spell Slot, Upcast, Extra Attack, Rage, Reckless Attack Enhancement, Brutal Critical, Ki
 Points, Negate Critical Hit, Extra Reaction, Crucial Save, Perfect Timing and Reroll Death Save.
 
@@ -152,9 +152,9 @@ inference unreliable.
 
 - **Actor sheets** get a badge in place of the dnd5e exhaustion pips, which only run to six. It
   shows the current level and lists the active penalties on hover; clicking it opens the tracker.
-- **The tracker** has two tabs. *Exhaustion* shows the level, the six columns with their current
-  penalties and the DC of the next long rest recovery save; *Spend* lists the spending options.
-  Below both sit buttons to run recovery and, for GMs, clear. It
+- **The tracker** is split in two, both halves visible at once: the table of columns and their
+  current penalties on the left, the spending options as a grid of cards on the right. Each side
+  scrolls on its own, and buttons to run recovery and (for GMs) clear sit beneath both. It
   will not let you push a column past the number of rows, or the total past the maximum. Edits
   apply the moment you make them &mdash; there is no confirmation step &mdash; and a burst of
   changes is summarized as a single chat card once you stop adjusting.
@@ -197,7 +197,7 @@ await ee.setMarks(actor, { speed: 4, hpMax: 2 });     // Method B only
 await ee.recoverOnLongRest(actor);
 
 ee.track(actor);                                // open the tracker (defaults to the selected token)
-ee.spendDialog(actor);                          // open the tracker on its Spend tab
+ee.spendDialog(actor);                          // open the tracker (spending is built in)
 await ee.spend(actor, "upcast", { spellLevel: 5, beyondMax: true });  // costs 10
 ```
 
