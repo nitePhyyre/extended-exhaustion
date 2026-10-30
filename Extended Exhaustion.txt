@@ -1,15 +1,214 @@
-<!--
-  Extended Exhaustion - Homebrewery source (homebrewery.naturalcrit.com)
+# Extended Exhaustion
 
-  This file was empty when the section below was written, so only the new addition is
-  present. Paste the rest of the document around it; the block belongs in the
-  "Spending Exhaustion" list.
--->
+Exhaustion is measured in levels from 0 to 30. A creature dies if its exhaustion level reaches 31.
+
+
+## Exhaustion Effects
+
+Each level of exhaustion imposes cumulative penalties as shown on the **Extended Exhaustion** table.
+
+Choose one of the following methods for applying exhaustion penalties.
+
+#### Method A: Sequential Progression
+
+When a creature gains exhaustion, fill the table from left to right, completing each row before moving to the next.
+
+With this method, exhaustion levels 1–6 introduce each penalty type. Levels 7–12 increase each penalty by 1, levels 13–18 increase each penalty by 2, and so on.
+
+#### Method B: Player Choice
+
+When you gain exhaustion, choose which column to mark. You can distribute your exhaustion levels across the six penalty types as you choose.
+
+This allows you to customize how exhaustion affects your character based on your priorities and playstyle.
+
+### Extended Exhaustion
+
+| Level | Mental Skills | Physical Skills | Mental Saves | Physical Saves |  Speed | Hit Point Maximum |
+| :---: | :-----------: | :-------------: | :----------: | :------------: | :----: | :---------------: |
+|   1   |       −1      |        −1       |      −1      |       −1       | −5 ft. |        −1/6       |
+|   2   |       −1      |        −1       |      −1      |       −1       | −5 ft. |        −1/6       |
+|   3   |       −1      |        −1       |      −1      |       −1       | −5 ft. |        −1/6       |
+|   4   |       −1      |        −1       |      −1      |       −1       | −5 ft. |        −1/6       |
+|   5   |       −1      |        −1       |      −1      |       −1       | −5 ft. |        −1/6       |
+|   6   |       −1      |        −1       |      −1      |       −1       | −5 ft. |        −1/6       |
+
+
+**Mental Skills**: Mental skills include Intelligence-, Wisdom-, and Charisma-based ability checks.
+
+**Physical Skills:** Physical skills include Strength-, Dexterity-, and Constitution-based ability checks.
+
+**Mental Saves:** Mental saving throws include Intelligence, Wisdom, and Charisma saving throws.
+
+**Physical Saves:** Physical saving throws include Strength, Dexterity, and Constitution saving throws.
+
+---
+
+
+
+
+
+## Gaining Exhaustion
+
+A creature gains 1 level of exhaustion when it:
+
+* Drops to 0 hit points.
+* Travels for more than 8 hours in a day.
+* Goes without food or water, as described in the existing rules in chapter 8 of the *Player's Handbook*.
+* Suffers another effect that would normally cause exhaustion.
+* Endures other harsh conditions at the DM's discretion, such as extreme weather, magical curses, or similar hazards.
+
+---
+
+\column
+
+## Removing Exhaustion
+
+## Long Rest Recovery
+
+At the end of a long rest, you remove 1 level of exhaustion.
+
+Then, make a Constitution saving throw with a DC equal to **30 minus your current exhaustion level**.
+
+On a success, you remove 1 additional level of exhaustion and repeat this saving throw.
+
+Continue making saving throws in this way until you fail a saving throw or your exhaustion level reaches 0.
+
+### Example
+
+A creature with 12 levels of exhaustion finishes a long rest.
+
+It first removes 1 level of exhaustion, reducing its exhaustion level to 11. It then makes a Constitution saving throw against a DC of 19 (30 − 11).
+
+If it succeeds, it removes another level of exhaustion, reducing its exhaustion level to 10, and makes another Constitution saving throw, this time against a DC of 20 (30 − 10).
+
+The creature continues making saving throws until it fails one or reaches 0 exhaustion.
+
+## Other Recovery
+
+Spells and other magical effects that remove exhaustion function normally, removing the number of levels specified by the effect.
+
+---
+
+## Special Rules
+
+### Minimum Values
+
+Exhaustion cannot reduce an ability check or saving throw below 1.
+
+### Speed Reduction
+
+If exhaustion reduces your speed to 0 feet or less, your speed becomes 1 foot instead.
+
+### Hit Point Maximum
+
+When exhaustion reduces your hit point maximum, your current hit points are reduced accordingly if they exceed your new maximum.
+
+If this reduction would reduce you to 0 hit points, you instead drop to 1 hit point.
+
+### Unconscious Creatures
+
+Except for the Death Save Reroll, unconscious creature cannot voluntarily spend exhaustion. 
+
+\page
+
+## Spending Exhaustion
+
+Exhaustion represents a creature pushing itself beyond its normal limits. A creature can voluntarily gain exhaustion to fuel desperate actions or magical power.
+
+Unless otherwise stated, a creature can use an option below whenever it meets that option's requirements.
+
+
+
+### 1st-Level Spell Slot
+
+***1 Exhaustion.***
+
+If you have no spell slots remaining, you can gain 1 level of exhaustion to cast a 1st-level spell.
+
+### Upcast
+
+***1+ Exhaustion.***
+
+You can gain 1 level of exhaustion per spell level to cast a spell at a higher level.
+
+If you cast a spell beyond the highest level of spell slot normally available to you, the cost is 2 levels of exhaustion per spell level.
+
+### Extra Attack
+
+***1 Exhaustion.***
+
+When you take the Attack action, you can gain 1 level of exhaustion to make one additional weapon attack as part of that action.
+
+### Rage
+
+***2 Exhaustion.***
+
+If you have no uses of Rage remaining, you can gain 2 levels of exhaustion to enter your Rage.
+
+### Reckless Attack Enhancement
+
+***1 Exhaustion.***
+
+When you make melee weapon attacks during your turn, you can gain 1 level of exhaustion to gain advantage on all of those attack rolls, rather than only the first attack roll made using Reckless Attack.
+
+### Brutal Critical
+
+***1 Exhaustion.***
+
+When you score a critical hit, you can gain 1 level of exhaustion to roll one additional weapon damage die as part of the critical hit.
+
+### Ki Points
+
+***1 Exhaustion.***
+
+If you have no ki points remaining, you can gain 1 level of exhaustion to recover 2 ki points.
+
+If you shout **"Kaioken!"** when using this feature, you instead recover 3 ki points.
+
+### Negate Critical Hit
+
+***1 Exhaustion; Reaction.***
+
+When you would take a critical hit, you can use your reaction and gain 1 level of exhaustion to turn the critical hit into a normal hit.
+
+### Extra Reaction
+
+***1 Exhaustion.***
+
+You can gain 1 level of exhaustion to take an additional reaction before the start of your next turn.
+
+You can take only one reaction per trigger.
+
+### Crucial Save
+
+***1 Exhaustion.***
+
+When you make a saving throw, you can gain 1 level of exhaustion to add a +5 bonus to the roll.
+
+You can use this option after rolling the d20, but before the DM determines whether the roll succeeds or fails.
+
+### Perfect Timing
+
+***1 Exhaustion.***
+
+You can gain 1 level of exhaustion to act immediately, regardless of your position in the initiative order.
+
+This does not grant you an additional turn. Instead, you move to the top of the initiative order and act normally on this turn and all subsequent turns.
+
+### Reroll Death Save
+
+***2 Exhaustion; Reaction.***
+
+When you fail a death saving throw, you can use your reaction and gain 2 levels of exhaustion to reroll the saving throw.
+
+You must use the new result.
 
 ### Catch Your Breath
-**1 Exhaustion.**
 
-You can gain 1 level of exhaustion to regain hit points equal to one seventh of your
-hit point maximum, to a minimum of 1.
+***1 Exhaustion.***
+
+You can gain 1 level of exhaustion to regain hit points equal to one seventh of your hit point maximum, to a minimum of 1.
 
 You cannot use this option at 0 hit points.
+
+---
