@@ -1,0 +1,15 @@
+<!--
+  Extended Exhaustion - Homebrewery source (homebrewery.naturalcrit.com)
+
+  This file was empty when the section below was written, so only the new addition is
+  present. Paste the rest of the document around it; the block belongs in the
+  "Spending Exhaustion" list.
+-->
+
+### Catch Your Breath
+**1 Exhaustion.**
+
+You can gain 1 level of exhaustion to regain hit points equal to one seventh of your
+hit point maximum, to a minimum of 1.
+
+You cannot use this option at 0 hit points.

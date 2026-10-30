@@ -1,4 +1,5 @@
 import { MODULE_ID } from "./constants.mjs";
+import { healDenominator } from "./exhaustion.mjs";
 
 /**
  * Makes the "Spending Exhaustion" options actually do something.
@@ -44,6 +45,7 @@ export async function applySpendEffect(actor, optionId, context = {}) {
 
 /** @type {Record<string, (actor: Actor, context: object) => Promise<object>>} */
 const HANDLERS = {
+  healing: recoverHitPoints,
   spellSlot1: actor => grantSpellSlot(actor, 1),
   upcast: (actor, ctx) => grantSpellSlot(actor, Math.clamp(ctx.spellLevel ?? 1, 1, 9)),
   rage: actor => restoreUses(actor, ["rage"], 1),
@@ -133,6 +135,34 @@ function findFeature(actor, identifiers) {
     return wanted.includes(id) || wanted.includes(slug) || wanted.some(w => slug.includes(w));
   });
   return match ?? null;
+}
+
+/* -------------------------------------------- */
+
+/**
+ * Regain a fraction of the hit point maximum.
+ *
+ * The fraction is one step smaller than a mark in the Hit Point Maximum column costs, so the trade
+ * can never turn a profit. It is taken against the current maximum, which is already reduced by any
+ * hit point exhaustion, so a creature that has spent itself into a small pool heals a small amount.
+ * @param {Actor} actor
+ * @returns {Promise<object>}
+ */
+async function recoverHitPoints(actor) {
+  const hp = actor.system.attributes?.hp;
+  if ( !hp ) return { ok: false, summary: game.i18n.localize("EXTENDED_EXHAUSTION.Effect.Failed") };
+
+  const max = Math.max(0, hp.effectiveMax ?? hp.max ?? 0);
+  if ( hp.value >= max ) {
+    return { ok: false, summary: game.i18n.localize("EXTENDED_EXHAUSTION.Effect.AlreadyFull") };
+  }
+
+  const healed = Math.max(1, Math.floor(max / healDenominator()));
+  const value = Math.min(max, hp.value + healed);
+  await actor.update({ "system.attributes.hp.value": value });
+  return { ok: true, summary: game.i18n.format("EXTENDED_EXHAUSTION.Effect.Healed", {
+    amount: value - hp.value, denominator: healDenominator()
+  }) };
 }
 
 /* -------------------------------------------- */

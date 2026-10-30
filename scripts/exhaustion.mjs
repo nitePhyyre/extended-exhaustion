@@ -60,6 +60,21 @@ export function zeroAtMarks() {
 /* -------------------------------------------- */
 
 /**
+ * The denominator for hit points regained by spending exhaustion: one step behind the number of
+ * marks that would zero a column out.
+ *
+ * Keeping it a step behind is what stops the trade being free. A mark in the Hit Point Maximum
+ * column costs one part in {@link zeroAtMarks}, so buying health back always returns slightly less
+ * than putting that same level into hit points would cost, at any configured maximum.
+ * @returns {number}
+ */
+export function healDenominator() {
+  return zeroAtMarks() + 1;
+}
+
+/* -------------------------------------------- */
+
+/**
  * Feet of speed lost per mark in the Speed column, derived from the maximum level.
  * @returns {number}
  */

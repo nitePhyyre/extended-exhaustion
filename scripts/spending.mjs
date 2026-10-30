@@ -1,5 +1,7 @@
 import { MODULE_ID, SPEND_OPTIONS, SPEND_OPTIONS_BY_ID } from "./constants.mjs";
-import { addLevels, applyPlacement, getLevel, isImmune, maxLevel } from "./exhaustion.mjs";
+import {
+  addLevels, applyPlacement, getLevel, healDenominator, isImmune, maxLevel
+} from "./exhaustion.mjs";
 import { promptPlacement } from "./apps/place-dialog.mjs";
 import { applySpendEffect } from "./spend-effects.mjs";
 import { setting } from "./settings.mjs";
@@ -29,10 +31,12 @@ export function prepareOptions(actor) {
     const blocked = [];
     if ( unconscious && !option.allowUnconscious ) blocked.push("EXTENDED_EXHAUSTION.Spend.Blocked.Unconscious");
     if ( option.value > headroom ) blocked.push("EXTENDED_EXHAUSTION.Spend.Blocked.Lethal");
+    const reason = option.blocked?.(actor);
+    if ( reason ) blocked.push(reason);
     return {
       ...option,
       name: game.i18n.localize(option.label),
-      text: game.i18n.localize(option.description),
+      text: describe(option),
       costLabel: option.variable
         ? game.i18n.format("EXTENDED_EXHAUSTION.Spend.CostVariable", { value: option.value })
         : game.i18n.format("EXTENDED_EXHAUSTION.Spend.Cost", { value: option.value }),
@@ -65,6 +69,14 @@ export async function spend(actor, optionId, { spellLevel = 1, beyondMax = false
   }
   if ( isUnconscious(actor) && !option.allowUnconscious ) {
     ui.notifications.warn(game.i18n.localize("EXTENDED_EXHAUSTION.Notification.Unconscious"));
+    return null;
+  }
+
+  // The cost is charged before the effect is applied, so anything that would be a no-op has to be
+  // refused here rather than taking a level for nothing.
+  const blocked = option.blocked?.(actor);
+  if ( blocked ) {
+    ui.notifications?.warn?.(game.i18n.localize(blocked));
     return null;
   }
 
@@ -102,7 +114,7 @@ export async function spend(actor, optionId, { spellLevel = 1, beyondMax = false
     `modules/${MODULE_ID}/templates/chat/spend.hbs`, {
       actor,
       name: game.i18n.localize(option.label),
-      text: game.i18n.localize(option.description),
+      text: describe(option),
       cost,
       reaction: !!option.reaction,
       level: getLevel(actor),
@@ -122,6 +134,17 @@ export async function spend(actor, optionId, { spellLevel = 1, beyondMax = false
     speaker: ChatMessage.implementation.getSpeaker({ actor }),
     flags: { [MODULE_ID]: { type: "spend", option: option.id, cost } }
   });
+}
+
+/* -------------------------------------------- */
+
+/**
+ * An option's rules text, with any derived values filled in.
+ * @param {SpendOption} option
+ * @returns {string}
+ */
+export function describe(option) {
+  return game.i18n.format(option.description, { denominator: healDenominator() });
 }
 
 /* -------------------------------------------- */

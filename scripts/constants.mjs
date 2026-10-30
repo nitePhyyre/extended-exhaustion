@@ -133,6 +133,8 @@ export const GAIN_REASONS = {
  * @property {boolean} [variable]            Whether the cost is chosen at use time.
  * @property {boolean} [allowUnconscious]    Usable while unconscious.
  * @property {(actor: Actor) => boolean} [relevant]  Whether the option is likely relevant to this actor.
+ * @property {(actor: Actor) => string|null} [blocked]  Localization key explaining why the option
+ *                                                      cannot currently be used, or null.
  */
 
 /**
@@ -140,6 +142,14 @@ export const GAIN_REASONS = {
  * @type {SpendOption[]}
  */
 export const SPEND_OPTIONS = [
+  {
+    // Not from the source document: an addition for buying health back.
+    id: "healing",
+    label: "EXTENDED_EXHAUSTION.Spend.healing.Label",
+    description: "EXTENDED_EXHAUSTION.Spend.healing.Description",
+    value: 1,
+    blocked: atFullHealth
+  },
   {
     id: "spellSlot1",
     label: "EXTENDED_EXHAUSTION.Spend.spellSlot1.Label",
@@ -226,6 +236,21 @@ export const SPEND_OPTIONS = [
 
 /** Spend option definitions keyed by ID. */
 export const SPEND_OPTIONS_BY_ID = SPEND_OPTIONS.reduce((obj, o) => Object.assign(obj, { [o.id]: o }), {});
+
+/* -------------------------------------------- */
+
+/**
+ * Spending to heal does nothing at full health, and the cost is charged before the effect is
+ * applied, so the option has to be refused up front rather than wasting the level.
+ * @param {Actor} actor
+ * @returns {string|null}
+ */
+function atFullHealth(actor) {
+  const hp = actor.system.attributes?.hp;
+  if ( !hp ) return null;
+  const max = Math.max(0, hp.effectiveMax ?? hp.max ?? 0);
+  return (hp.value >= max) ? "EXTENDED_EXHAUSTION.Spend.Blocked.FullHealth" : null;
+}
 
 /* -------------------------------------------- */
 

@@ -130,6 +130,7 @@ Nine of the twelve options are mechanically realized rather than merely announce
 | Crucial Save | +5 added to the saving throw already rolled |
 | Perfect Timing | Moved to the top of initiative, and it becomes their turn |
 | Reroll Death Save | The failure is taken back and a fresh save rolled |
+| Catch Your Breath | Hit points are restored (see below) |
 
 Resources are written directly, so they appear on the sheet and are spent by playing normally.
 Advantage and the critical die are registered through dnd5e's own rules engine rather than by
@@ -139,6 +140,14 @@ Slots and rule effects granted **during combat expire at the end of that turn**,
 banked; a slot that was actually cast is not clawed back. Outside combat there is no turn to expire
 on, so grants simply stand. The death save reroll rolls first and only takes the failure back once
 a replacement exists, so cancelling the roll changes nothing.
+
+**Catch Your Breath** is an addition, not one of the document's twelve options. It restores hit
+points equal to one part in `zeroAt + 1` of the hit point maximum &mdash; a seventh at the default
+maximum of 30. That is deliberately one step smaller than a mark in the Hit Point Maximum column
+costs, so buying health back can never turn a profit, and it scales with the maximum like every
+other derived value. The fraction is taken against the *current* maximum, so a creature that has
+spent itself into a small pool heals a small amount, and the option is refused outright at full
+health rather than charging a level for nothing.
 
 **Extra Attack**, **Extra Reaction** and **Negate Critical Hit** stay announce-only. The first is
 pure table permission with nothing to write; the other two depend on reacting to another creature's
