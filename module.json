@@ -38,7 +38,7 @@
     }
   ],
   "socket": true,
-  "url": "https://github.com/nitePhyyre/ExtendedExhaustion",
-  "manifest": "https://github.com/nitePhyyre/ExtendedExhaustion/releases/latest/download/module.json",
-  "download": "https://github.com/nitePhyyre/ExtendedExhaustion/releases/latest/download/module.zip"
+  "url": "https://github.com/nitePhyyre/extended-exhaustion",
+  "manifest": "https://github.com/nitePhyyre/extended-exhaustion/releases/latest/download/module.json",
+  "download": "https://github.com/nitePhyyre/extended-exhaustion/releases/latest/download/module.zip"
 }
